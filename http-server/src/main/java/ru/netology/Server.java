@@ -6,15 +6,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.time.LocalDateTime;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.apache.http.client.utils.URLEncodedUtils;
 
 public class Server {
      ExecutorService pool;
@@ -65,9 +64,16 @@ public class Server {
                     stringBuilder.append(bodyLine + "\n");
                 }
             }
-            Request request = requestBuilder.setMethod(parts[0])
-                    .setPath(parts[1])
-                    .setProtocolVersion(parts[2])
+
+            String[] pair = parts[1].split("\\?");
+
+            requestBuilder.setMethod(parts[0])
+                    .setPath(pair[0]);
+            if(pair.length > 1){
+                requestBuilder.setQuery(URLEncodedUtils.parse(pair[1], Charset.defaultCharset()));
+            }
+
+            Request request = requestBuilder.setProtocolVersion(parts[2])
                     .setHeaders(list)
                     .setBody(stringBuilder.toString())
                     .build();

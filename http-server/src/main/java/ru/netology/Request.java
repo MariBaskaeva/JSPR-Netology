@@ -1,5 +1,7 @@
 package ru.netology;
 
+import org.apache.http.NameValuePair;
+
 import java.util.List;
 
 public class Request {
@@ -8,20 +10,36 @@ public class Request {
     private String protocolVersion;
     private List<String> headers;
     private String body;
+    private List<NameValuePair> queryParams;
 
-    public Request(String method, String path, String protocolVersion, List<String> headers){
+    public Request(String method, String path, List<NameValuePair> query, String protocolVersion, List<String> headers){
         this.method = method;
         this.path = path;
+        this.queryParams = query;
         this.protocolVersion = protocolVersion;
         this.headers = headers;
     }
 
-    public Request(String method, String path, String protocolVersion, List<String> headers, String body){
+    public Request(String method, String path, List<NameValuePair> query, String protocolVersion, List<String> headers, String body){
         this.method = method;
         this.path = path;
+        this.queryParams = query;
         this.protocolVersion = protocolVersion;
         this.headers = headers;
         this.body = body;
+    }
+
+    public String getQueryParam(String name){
+        for (NameValuePair pairs: queryParams) {
+            if(pairs.getName().equals(name)){
+                return pairs.getValue();
+            }
+        }
+        return null;
+    }
+
+    public List<NameValuePair> getQueryParams(){
+        return queryParams;
     }
 
     public String getMethod() {

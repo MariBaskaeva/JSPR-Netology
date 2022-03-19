@@ -11,7 +11,7 @@ public class Main {
     server.addHandler("GET", "/index.html", (request, responseStream) -> {
       final var filePath = Path.of(".", "public", request.getPath());
       final var mimeType = Files.probeContentType(filePath);
-
+      System.out.println(request.getQueryParam("chat_id"));
       new ResponseBuilder()
               .setStatus(200)
               .setStatusMessage("Ok")

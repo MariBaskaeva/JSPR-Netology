@@ -1,5 +1,7 @@
 package ru.netology;
 
+import org.apache.http.NameValuePair;
+
 import java.util.List;
 
 public class RequestBuilder {
@@ -8,6 +10,7 @@ public class RequestBuilder {
     private String protocolVersion;
     private List<String> headers;
     private String body = "";
+    private List<NameValuePair> query;
 
     public RequestBuilder setMethod(String method) {
         this.method = method;
@@ -16,6 +19,11 @@ public class RequestBuilder {
 
     public RequestBuilder setPath(String path) {
         this.path = path;
+        return this;
+    }
+
+    public RequestBuilder setQuery(List<NameValuePair> query) {
+        this.query = query;
         return this;
     }
 
@@ -35,7 +43,7 @@ public class RequestBuilder {
     }
 
     public Request build(){
-        return body.equals("") ? new Request(method, path, protocolVersion, headers)
-                : new Request(method, path, protocolVersion, headers, body);
+        return body.equals("") ? new Request(method, path, query, protocolVersion, headers)
+                : new Request(method, path, query, protocolVersion, headers, body);
     }
 }
